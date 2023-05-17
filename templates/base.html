@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script src="{% static 'js/app.js' %}" defer></script>
+    <!-- Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhz"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- icon -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <title>My Site</title>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light container">
+        <a class="navbar-brand" href="#">
+          <img src="/img/logo_full.svg" alt="Viblo" width="62" height="21" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav font-weight-bold">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'posts' %}">My Posts</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'post-create' %}">New Post</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+        <div class="sb hidden-sm-down flex-fill mr-1">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Tìm kiếm trên blog" />
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <i
+            aria-hidden="true"
+            class="fa fa-circle-o-notch fa-spin sb-icon"
+            style="display: none"></i>
+          <i
+            aria-hidden="true"
+            class="fa fa-times sb-icon clr text-muted"
+            style="display: none"></i>
+          <div class="sb__suggestions" style="display: none"><div></div></div>
+        </div>
+
+        <div class="ml-auto">
+          {% if request.user.is_authenticated %}
+          <span class="mr-3">Hi {{ request.user.username | title }}</span>
+          <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+          {% else %}
+          <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+          <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+
+    <main class="container mt-4">
+      <div class="row">
+        <div class="col-lg-12">
+          {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+            <div
+              class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+              {{ message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          {% block content %} {% endblock content %}
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
